@@ -10,10 +10,10 @@
        =================================================== */
     :root {
       --font: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
-      --bg: #000;
-      --text: #fff;
+      --bg: #fff;
+      --text: #000;
       --muted: #888;
-      --border: #333;
+      --border: #e0e0e0;
       --header: 48px;
       --gap: 2px;
       --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -40,7 +40,7 @@
       display: flex;
       align-items: center;
       padding: 0 20px;
-      background: #000;
+      background: var(--bg);
       border-bottom: 1px solid var(--border);
       gap: 24px;
     }
@@ -245,7 +245,7 @@
       position: fixed;
       inset: 0;
       z-index: 200;
-      background: #111;
+      background: #fff;
       overflow-y: auto;
       transform: translateY(100%);
       transition: transform 0.45s var(--ease);
@@ -256,7 +256,7 @@
     .modal-header {
       position: sticky;
       top: 0;
-      background: #111;
+      background: #fff;
       border-bottom: 1px solid var(--border);
       padding: 0 20px;
       height: var(--header);
@@ -469,7 +469,7 @@
     /* ---- Page transition ---- */
     #pageOverlay {
       position: fixed; inset: 0;
-      background: #111;
+      background: #fff;
       z-index: 300;
       pointer-events: none;
       opacity: 0;
