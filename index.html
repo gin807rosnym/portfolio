@@ -79,7 +79,7 @@
     .lang-toggle:hover { border-color: var(--text); color: var(--text); }
 
     /* ---- Grid — 仿 twinbrainsfilms 全屏布局 ---- */
-    .main-content { margin-top: var(--header); flex: 1; }
+    .main-content { margin-top: var(--header); flex: 1; padding-bottom: 60px; }
     .projects-grid {
       display: block;
       /* 全屏铺满，移除最大宽度限制 */
@@ -448,7 +448,10 @@
       .project-cell.single,
       .project-cell.half,
       .project-cell.tall { height: 56vw; width: 100%; }
-      .project-row.double { flex-direction: column; height: auto; gap: 2px; }
+      .project-row.double { 
+        flex-direction: column; 
+        gap: 2px;
+      }
       .project-row.double .project-cell.half { height: 56vw; }
       .project-cell.tall { width: 100%; height: auto; aspect-ratio: 9/16; max-height: 80vh; }
       .modal-info { grid-template-columns: 1fr; gap: 24px; padding: 20px 16px 48px; }
@@ -458,6 +461,8 @@
       .about-info-grid { grid-template-columns: 1fr; gap: 6px; }
       .about-info-grid .info-label { display: none; }
       .about-info-grid .info-value::before { content: attr(data-label) "："attr(data-value); }
+      /* 确保网格不被footer遮挡 */
+      .projects-grid { padding-bottom: 40px; }
     }
     /* iPad — 768px ~ 1024px */
     @media(min-width: 769px) and (max-width: 1024px) {
