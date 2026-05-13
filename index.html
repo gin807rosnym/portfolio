@@ -894,12 +894,14 @@ function initVideoObserver() {
           video.play().catch(()=>{});
         }
       } else {
-        // 离开视口：暂停，节省性能
-        video.pause();
+        // 离开视口：暂停，节省性能（手机端不暂停，防止卡顿）
+        if (window.innerWidth > 768) {
+          video.pause();
+        }
       }
     });
   }, {
-    threshold: 0.25   // 格子露出 25% 就开始播
+    threshold: 0.1   // 格子露出 10% 就开始播，降低避免卡顿
   });
 
   // 观察所有网格视频（不包括 modal 里的）
