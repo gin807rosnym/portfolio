@@ -77,24 +77,24 @@
     }
     .lang-toggle:hover { border-color: var(--text); color: var(--text); }
 
-    /* ---- Grid — twinbrainsfilms 风格：无间距 ---- */
+    /* ---- Grid — 作品紧贴无间隙 ---- */
     .main-content { margin-top: var(--header); flex: 1; padding-bottom: 60px; }
     .projects-grid { display: block; }
 
-    /* 单格 — 全宽，高度100vh左右 */
+    /* 单格 — 全宽 */
     .project-cell.single {
       position: relative;
       overflow: hidden;
       background: #111;
       cursor: none;
       width: 100%;
-      /* aspect-ratio控制高度，类似参考站的1:1方块 */
-      aspect-ratio: 16/10;
+      /* 固定高度，与双格行保持一致 */
+      height: 56.25vw;
+      max-height: 70vh;
     }
     /* 双格行 — 两个半宽并排 */
     .project-row.double {
       display: flex;
-      /* 无间距 */
     }
     .project-cell.half {
       position: relative;
@@ -102,11 +102,12 @@
       background: #111;
       cursor: none;
       flex: 1;
-      /* aspect-ratio保持一致 */
-      aspect-ratio: 16/10;
+      /* 固定高度，与单格行保持一致 */
+      height: 28.125vw;
+      max-height: 35vh;
     }
 
-    /* ---- Project Cell (通用) — 图片填充整个格子 ---- */
+    /* ---- Project Cell (通用) — 图片填满格子，可能被裁切 ---- */
     .project-cell { aspect-ratio: unset; }
     .cell-media {
       position: absolute;
@@ -114,17 +115,12 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.6s var(--ease), opacity 0.3s var(--ease);
     }
     /* 视频2/3/11等可能有黑边的视频，强制铺满 */
     .project-cell.fill .cell-media {
       object-fit: fill;
     }
-    /* hover时：图片放大1.025 + 颜色混合（twinbrainsfilms风格） */
-    .project-cell:hover .cell-media {
-      transform: scale(1.025);
-      mix-blend-mode: color;
-    }
+    /* 无hover变色效果，保持原样 */
 
     /* ---- 文字叠加层（仿twinbrainsfilms）---- */
     .cell-overlay {
@@ -175,31 +171,19 @@
       pointer-events: none;
     }
 
-    /* ---- 竖版（portrait）照片：双格并排，保持完整比例 ---- */
+    /* ---- 竖版（portrait）照片：填满格子，可能被裁切 ---- */
     .project-row.portrait-double {
       display: flex;
     }
     .project-cell.portrait.single {
-      aspect-ratio: 9/16;
-      height: auto;
       width: 50%;
       flex: unset;
       overflow: hidden;
     }
     .project-cell.portrait .cell-media {
-      position: relative;
       width: 100%;
-      height: auto;
-      aspect-ratio: 9/16;
-      object-fit: contain;
-    }
-    .project-cell.portrait:hover .cell-media {
-      transform: scale(1.025);
-      mix-blend-mode: color;
-    }
-    .project-cell.portrait .cell-overlay {
-      position: absolute;
-      inset: 0;
+      height: 100%;
+      object-fit: cover;
     }
     .project-cell.portrait .photo-label {
       position: absolute;
@@ -466,10 +450,13 @@
     .anim.in { opacity: 1; transform: none; }
 
     /* ---- Responsive ---- */
-    /* 手机 — 全屏布局 */
+    /* 手机 — 全宽布局 */
     @media(max-width: 768px) {
       .project-cell.single,
-      .project-cell.half { aspect-ratio: 4/3; }
+      .project-cell.half {
+        height: 56.25vw;
+        max-height: none;
+      }
       .project-row.double { flex-direction: column; }
       .project-cell.portrait.single { width: 100%; }
       .modal-info { grid-template-columns: 1fr; gap: 24px; padding: 20px 16px 48px; }
@@ -484,8 +471,14 @@
     }
     /* iPad — 768px ~ 1024px */
     @media(min-width: 769px) and (max-width: 1024px) {
-      .project-cell.single { aspect-ratio: 16/9; }
-      .project-row.double .project-cell.half { aspect-ratio: 16/9; }
+      .project-cell.single {
+        height: 45vw;
+        max-height: 60vh;
+      }
+      .project-cell.half {
+        height: 22.5vw;
+        max-height: 30vh;
+      }
     }
 
     /* ---- Page transition ---- */
