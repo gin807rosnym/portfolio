@@ -447,6 +447,10 @@
     .anim.in { opacity: 1; transform: none; }
 
     /* ---- Responsive ---- */
+    /* 手机端隐藏自定义光标 */
+    @media(max-width: 768px) {
+      .custom-cursor { display: none !important; }
+    }
     /* 手机 — 全宽布局 */
     @media(max-width: 768px) {
       .project-cell.single,
@@ -465,9 +469,9 @@
       .about-wrap { padding: 32px 16px 60px; }
       .about-h1 { font-size: 16px; }
       .about-info-grid { grid-template-columns: 1fr; gap: 6px; }
-      .about-info-grid .info-label { display: none; }
-      .about-info-grid .info-value::before { content: attr(data-label) "："attr(data-value); }
-      .projects-grid { padding-bottom: 40px; }
+      .about-info-grid .info-label { display: block; color: #888; font-size: 12px; letter-spacing: 0.05em; margin-bottom: 2px; }
+      .about-info-grid .info-value { color: #222; }
+      .projects-grid { padding-bottom: 0; }
       .photo-label { left: 12px; bottom: 12px; font-size: 10px; }
     }
     /* iPad — 768px ~ 1024px */
@@ -778,14 +782,12 @@ function buildGrid() {
     const p = displayProjects[i];
 
     if (p.layout === 'double') {
-      // 双格布局
       const next = displayProjects[i + 1];
       const row = document.createElement('div');
       row.className = 'project-row double anim';
 
       if (p.portrait) {
-        // portrait 照片：两两配对，如果只有一个就填满一行
-        row.className = 'project-row double anim';
+        // portrait 照片：两两配对，如果只有孤立的portrait就填满一行
         const cell = makeCell(p, 'single');
         cell.style.width = next && next.portrait ? '50%' : '100%';
         cell.style.height = '56.25vw';
@@ -797,14 +799,14 @@ function buildGrid() {
           cell2.style.height = '56.25vw';
           cell2.style.maxHeight = '70vh';
           row.appendChild(cell2);
-          i++;
+          i++; // 跳过已配对的portrait
         }
       } else {
-        // 普通视频双格
+        // 普通视频双格：如果下一个是portrait则单独占行
         row.appendChild(makeCell(p, 'half'));
         if (next && !next.portrait) {
           row.appendChild(makeCell(next, 'half'));
-          i++;
+          i++; // 跳过已配对的非portrait
         }
       }
       grid.appendChild(row);
@@ -1178,30 +1180,32 @@ function showAbout() {
   mainContent.style.display = 'none';
   footer.style.display = 'none';
 
-  document.getElementById('aboutTitle').innerHTML = '关于我';
+  document.getElementById('aboutTitle').innerHTML = '<span class="en-text">ABOUT ME</span><span class="cn-text">关于我</span>';
   document.getElementById('aboutBody').innerHTML = `<div class="about-section">
-    <h2>基本信息</h2>
+    <h2><span class="en-text">PROFILE</span><span class="cn-text">基本信息</span></h2>
     <div class="about-info-grid">
-      <span class="info-label">姓名</span><span class="info-value">袁金辉</span>
-      <span class="info-label">年龄</span><span class="info-value">28</span>
-      <span class="info-label">学历</span><span class="info-value">本科</span>
-      <span class="info-label">毕业院校/专业</span><span class="info-value">广东工业大学 / 美术学</span>
-      <span class="info-label">电话/微信</span><span class="info-value">13178826367</span>
+      <span class="info-label"><span class="en-text">Name</span><span class="cn-text">姓名</span></span><span class="info-value">袁金辉</span>
+      <span class="info-label"><span class="en-text">Age</span><span class="cn-text">年龄</span></span><span class="info-value">28</span>
+      <span class="info-label"><span class="en-text">Education</span><span class="cn-text">学历</span></span><span class="info-value"><span class="en-text">Bachelor's Degree</span><span class="cn-text">本科</span></span>
+      <span class="info-label"><span class="en-text">University/Major</span><span class="cn-text">毕业院校/专业</span></span><span class="info-value">广东工业大学 / <span class="en-text">Fine Arts</span><span class="cn-text">美术学</span></span>
+      <span class="info-label"><span class="en-text">Phone/WeChat</span><span class="cn-text">电话/微信</span></span><span class="info-value">13178826367</span>
     </div>
   </div>
  <div class="about-section">
-    <h2>自我介绍</h2>
-    <p>能吃苦，我会尽快融入新的环境，适配大家的工作流，虚心学习。有前期拍摄以及影像后期编辑的能力，基本能够使用市面上的摄影机，云台。</p>
-    <p>会使用PR，AE，Davinci Resolve 等后期处理软件以及三维设计软件 Blender。</p>
-    <p>会粤语，会点英语，会点日语，有JLPT N2证书。</p>
+    <h2><span class="en-text">ABOUT</span><span class="cn-text">自我介绍</span></h2>
+    <p class="en-text">Hardworking and adaptable, I quickly integrate into new environments and work flows. Skilled in pre-production shooting and post-production editing. Proficient with professional cameras, gimbals, and software including PR, AE, DaVinci Resolve, and Blender.</p>
+    <p class="en-text">Languages: Cantonese, English, Japanese (JLPT N2).</p>
+    <p class="cn-text">能吃苦，我会尽快融入新的环境，适配大家的工作流，虚心学习。有前期拍摄以及影像后期编辑的能力，基本能够使用市面上的摄影机，云台。</p>
+    <p class="cn-text">会使用PR，AE，Davinci Resolve 等后期处理软件以及三维设计软件 Blender。</p>
+    <p class="cn-text">会粤语，会点英语，会点日语，有JLPT N2证书。</p>
   </div>`;
   document.getElementById('aboutEmail').textContent = '13178826367';
   document.getElementById('aboutEmail').href = 'tel:13178826367';
   document.getElementById('aboutIG').href = SITE.instagram;
-  document.getElementById('aboutIG').style.display = 'none';
+  document.getElementById('aboutIG').style.display = '';
 
   aboutWrap.classList.add('active');
-  document.title = '袁金辉作品集 — 关于我';
+  document.title = '<span class="en-text">YUAN JINHUI PORTFOLIO — ABOUT</span><span class="cn-text">袁金辉作品集 — 关于我</span>';
   setLang(currentLang);
 }
 
