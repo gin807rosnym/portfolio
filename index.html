@@ -171,13 +171,12 @@
       pointer-events: none;
     }
 
-    /* ---- 竖版（portrait）照片：填满格子，可能被裁切 ---- */
+    /* ---- 竖版（portrait）照片：桌面端两列并排 ---- */
     .project-cell.portrait.single {
       width: 50%;
       flex: unset;
       overflow: hidden;
       position: relative;
-      /* 默认高度，配对时会用 JS 设置 inline style */
       height: 56.25vw;
       max-height: 70vh;
     }
@@ -456,17 +455,18 @@
       .main-content { padding-bottom: 0 !important; }
       .project-cell.single,
       .project-cell.half {
-        height: 56.25vw;
-        max-height: none;
-        width: 100%;
+        height: 56.25vw !important;
+        max-height: none !important;
+        width: 100% !important;
+        flex: unset !important;
       }
-      .project-row.double { flex-direction: column; }
+      .project-row.double { flex-direction: column !important; }
       .project-cell.portrait.single {
-        width: 100%;
-        height: 56.25vw;
-        max-height: none;
+        width: 100% !important;
+        height: 56.25vw !important;
+        max-height: none !important;
       }
-      #grid { padding: 0; }
+      #grid { padding: 0 !important; width: 100% !important; }
       .modal-info { grid-template-columns: 1fr; gap: 24px; padding: 20px 16px 48px; }
       .modal-title { font-size: 18px; }
       .about-wrap { padding: 32px 16px 60px; }
@@ -791,16 +791,8 @@ function buildGrid() {
       if (p.portrait) {
         // portrait 照片必须两两配对，否则跳过
         if (next && next.portrait) {
-          const cell = makeCell(p, 'single');
-          cell.style.width = '50%';
-          cell.style.height = '56.25vw';
-          cell.style.maxHeight = '70vh';
-          row.appendChild(cell);
-          const cell2 = makeCell(next, 'single');
-          cell2.style.width = '50%';
-          cell2.style.height = '56.25vw';
-          cell2.style.maxHeight = '70vh';
-          row.appendChild(cell2);
+          row.appendChild(makeCell(p, 'single'));
+          row.appendChild(makeCell(next, 'single'));
           grid.appendChild(row);
           i += 2;
           continue;
