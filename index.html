@@ -697,33 +697,41 @@ const SITE = {
 // cover     : 封面图路径（可留空，显示渐变色占位）
 // clipStart : 首页格子循环片段的起始秒数（type=video 时有效）
 // clipEnd   : 首页格子循环片段的结束秒数（type=video 时有效）
-// layout    : "single"=全宽独占一行 / "double"=与下一个项目并排 / "tall"=竖屏单格居中
+// layout: "single"=大格子全宽 / "double"=小格子与下一个并排
 const PROJECTS = [
-  // ===== 视频 =====
+  // 大格子 = 单格（只放视频）
   { id:"p1",  type:"video", title:"视频作品 01", titleCN:"视频作品 01", director:"", directorCN:"", cover:"", video:"videos/视频1.mp4",  bilibili:"https://www.bilibili.com/video/BV1Fm5C6cEsh/", clipStart:0,  clipEnd:8,  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
-  { id:"p2",  type:"video", title:"视频作品 02", titleCN:"视频作品 02", director:"", directorCN:"", cover:"", video:"videos/视频2.mp4",  bilibili:"https://www.bilibili.com/video/BV1Fm5C6cEQw/", clipStart:0,  clipEnd:8,  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"p3",  type:"video", title:"视频作品 03", titleCN:"视频作品 03", director:"", directorCN:"", cover:"", video:"videos/视频3.mp4",  bilibili:"https://www.bilibili.com/video/BV1Jm5C6cEUs/", clipStart:0,  clipEnd:8,  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  // 小格子 = 双格
+  { id:"ph4", type:"photo", portrait:true, title:"摄影作品 04", titleCN:"摄影作品 04", director:"", directorCN:"", photo:"images/图片4.png",  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph6", type:"photo", portrait:true, title:"摄影作品 06", titleCN:"摄影作品 06", director:"", directorCN:"", photo:"images/图片6.png",  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph5", type:"photo", portrait:true, title:"摄影作品 05", titleCN:"摄影作品 05", director:"", directorCN:"", photo:"images/图片5.png",  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph1", type:"photo", portrait:true, title:"摄影作品 01", titleCN:"摄影作品 01", director:"", directorCN:"", photo:"images/图片1.png",  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  // 大格子
   { id:"p4",  type:"video", title:"视频作品 04", titleCN:"视频作品 04", director:"", directorCN:"", cover:"", video:"videos/视频4.mp4",  bilibili:"https://www.bilibili.com/video/BV16m5C6cEAM/", clipStart:0,  clipEnd:8,  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  // 小格子
   { id:"p5",  type:"video", title:"视频作品 05", titleCN:"视频作品 05", director:"", directorCN:"", cover:"", video:"videos/视频5.mp4",  bilibili:"https://www.bilibili.com/video/BV1ZQ5C64EaZ/", clipStart:0,  clipEnd:8,  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
   { id:"p6",  type:"video", title:"视频作品 06", titleCN:"视频作品 06", director:"", directorCN:"", cover:"", video:"videos/视频6.mp4",  bilibili:"https://www.bilibili.com/video/BV1JN5C6fE13/", clipStart:0,  clipEnd:8,  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"p7",  type:"video", title:"视频作品 07", titleCN:"视频作品 07", director:"", directorCN:"", cover:"", video:"videos/视频7.mp4",  bilibili:"https://www.bilibili.com/video/BV1rP5C68EEV/", clipStart:0,  clipEnd:8,  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
   { id:"p8",  type:"video", title:"视频作品 08", titleCN:"视频作品 08", director:"", directorCN:"", cover:"", video:"videos/视频8.mp4",  bilibili:"https://www.bilibili.com/video/BV1rP5C68EEf/", clipStart:0,  clipEnd:8,  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
   { id:"p9",  type:"video", title:"视频作品 09", titleCN:"视频作品 09", director:"", directorCN:"", cover:"", video:"videos/视频9.mp4",  bilibili:"https://www.bilibili.com/video/BV1nP5C68Ehw/", clipStart:0,  clipEnd:8,  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"p10", type:"video", title:"视频作品 10", titleCN:"视频作品 10", director:"", directorCN:"", cover:"", video:"videos/视频10.mp4", bilibili:"https://www.bilibili.com/video/BV1Fm5C6cEno/", clipStart:0,  clipEnd:8,  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
-  { id:"p11", type:"video", title:"视频作品 11", titleCN:"视频作品 11", director:"", directorCN:"", cover:"", video:"videos/视频11.mp4", bilibili:"https://www.bilibili.com/video/BV1ZQ5C64EwF/", clipStart:0,  clipEnd:8,  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"p12", type:"video", title:"视频作品 12", titleCN:"视频作品 12", director:"", directorCN:"", cover:"", video:"videos/视频12.mp4", bilibili:"https://www.bilibili.com/video/BV1EQ5C6tEwz/", clipStart:0,  clipEnd:8,  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  // 大格子
+  { id:"p3",  type:"video", title:"视频作品 03", titleCN:"视频作品 03", director:"", directorCN:"", cover:"", video:"videos/视频3.mp4",  bilibili:"https://www.bilibili.com/video/BV1Jm5C6cEUs/", clipStart:0,  clipEnd:8,  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  // 小格子
+  { id:"ph7", type:"photo", portrait:true, title:"摄影作品 07", titleCN:"摄影作品 07", director:"", directorCN:"", photo:"images/图片7.png",  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"p7",  type:"video", title:"视频作品 07", titleCN:"视频作品 07", director:"", directorCN:"", cover:"", video:"videos/视频7.mp4",  bilibili:"https://www.bilibili.com/video/BV1rP5C68EEV/", clipStart:0,  clipEnd:8,  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"p2",  type:"video", title:"视频作品 02", titleCN:"视频作品 02", director:"", directorCN:"", cover:"", video:"videos/视频2.mp4",  bilibili:"https://www.bilibili.com/video/BV1Fm5C6cEQw/", clipStart:0,  clipEnd:8,  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph8", type:"photo", portrait:true, title:"摄影作品 08", titleCN:"摄影作品 08", director:"", directorCN:"", photo:"images/图片8.png",  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  // 大格子
   { id:"p13", type:"video", title:"视频作品 13", titleCN:"视频作品 13", director:"", directorCN:"", cover:"", video:"videos/视频13.mp4", bilibili:"https://www.bilibili.com/video/BV1ZQ5C64EGm/", clipStart:0,  clipEnd:8,  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  // 小格子
+  { id:"p12", type:"video", title:"视频作品 12", titleCN:"视频作品 12", director:"", directorCN:"", cover:"", video:"videos/视频12.mp4", bilibili:"https://www.bilibili.com/video/BV1EQ5C6tEwz/", clipStart:0,  clipEnd:8,  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
   { id:"p14", type:"video", title:"视频作品 14", titleCN:"视频作品 14", director:"", directorCN:"", cover:"", video:"videos/视频14.mp4", bilibili:"https://www.bilibili.com/video/BV1ES5C6fEt4/", clipStart:0,  clipEnd:8,  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  // ===== 照片（竖版双格并排） =====
-  { id:"ph1", type:"photo", portrait:true, title:"摄影作品 01", titleCN:"摄影作品 01", director:"", directorCN:"", photo:"images/图片1.png",  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph9", type:"photo", portrait:true, title:"摄影作品 09", titleCN:"摄影作品 09", director:"", directorCN:"", photo:"images/图片9.png",  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"p10", type:"video", title:"视频作品 10", titleCN:"视频作品 10", director:"", directorCN:"", cover:"", video:"videos/视频10.mp4", bilibili:"https://www.bilibili.com/video/BV1Fm5C6cEno/", clipStart:0,  clipEnd:8,  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  // 大格子
+  { id:"p11", type:"video", title:"视频作品 11", titleCN:"视频作品 11", director:"", directorCN:"", cover:"", video:"videos/视频11.mp4", bilibili:"https://www.bilibili.com/video/BV1ZQ5C64EwF/", clipStart:0,  clipEnd:8,  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  // 小格子
   { id:"ph2", type:"photo", portrait:true, title:"摄影作品 02", titleCN:"摄影作品 02", director:"", directorCN:"", photo:"images/图片2.png",  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
   { id:"ph3", type:"photo", portrait:true, title:"摄影作品 03", titleCN:"摄影作品 03", director:"", directorCN:"", photo:"images/图片3.png",  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph4", type:"photo", portrait:true, title:"摄影作品 04", titleCN:"摄影作品 04", director:"", directorCN:"", photo:"images/图片4.png",  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph5", type:"photo", portrait:true, title:"摄影作品 05", titleCN:"摄影作品 05", director:"", directorCN:"", photo:"images/图片5.png",  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph6", type:"photo", portrait:true, title:"摄影作品 06", titleCN:"摄影作品 06", director:"", directorCN:"", photo:"images/图片6.png",  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph7", type:"photo", portrait:true, title:"摄影作品 07", titleCN:"摄影作品 07", director:"", directorCN:"", photo:"images/图片7.png",  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph8", type:"photo", portrait:true, title:"摄影作品 08", titleCN:"摄影作品 08", director:"", directorCN:"", photo:"images/图片8.png",  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph9", type:"photo", portrait:true, title:"摄影作品 09", titleCN:"摄影作品 09", director:"", directorCN:"", photo:"images/图片9.png",  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
 ];
 
 /* =====================================================
@@ -776,8 +784,8 @@ function buildGrid() {
   const grid = document.getElementById('grid');
   grid.innerHTML = '';
 
-  // 随机排序
-  displayProjects = shuffleArray(PROJECTS);
+  // 按固定顺序显示（不随机）
+  displayProjects = [...PROJECTS];
 
   let i = 0;
   while (i < displayProjects.length) {
@@ -788,40 +796,18 @@ function buildGrid() {
       const row = document.createElement('div');
       row.className = 'project-row double anim';
 
-      if (p.portrait) {
-        // portrait照片：优先两两配对，否则与视频配对
-        if (next && next.portrait) {
-          // 两个portrait配对
-          row.appendChild(makeCell(p, 'single'));
-          row.appendChild(makeCell(next, 'single'));
-          grid.appendChild(row);
-          i += 2;
-        } else if (next) {
-          // portrait与视频配对（portrait占左半，视频占右半）
-          row.appendChild(makeCell(p, 'single'));
-          row.appendChild(makeCell(next, 'half'));
-          grid.appendChild(row);
-          i += 2;
-        } else {
-          // 没有下一个了，跳过
-          i++;
-        }
-      } else {
-        // 普通视频双格
-        row.appendChild(makeCell(p, 'half'));
-        if (next && !next.portrait) {
-          row.appendChild(makeCell(next, 'half'));
-          i++;
-        }
-        grid.appendChild(row);
+      // 双格：当前项 + 下一个配对
+      row.appendChild(makeCell(p, 'single'));
+      if (next) {
+        row.appendChild(makeCell(next, 'single'));
+        i++;
       }
+      grid.appendChild(row);
     } else {
-      // 单格：只放视频，不放照片
-      if (p.type === 'video') {
-        const cell = makeCell(p, 'single');
-        cell.classList.add('anim');
-        grid.appendChild(cell);
-      }
+      // 单格：全宽独占一行
+      const cell = makeCell(p, 'single');
+      cell.classList.add('anim');
+      grid.appendChild(cell);
     }
     i++;
   }
