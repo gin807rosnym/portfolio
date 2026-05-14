@@ -172,15 +172,18 @@
     }
 
     /* ---- 竖版（portrait）照片：填满格子，可能被裁切 ---- */
-    .project-row.portrait-double {
-      display: flex;
-    }
     .project-cell.portrait.single {
       width: 50%;
       flex: unset;
       overflow: hidden;
+      position: relative;
+      /* 默认高度，配对时会用 JS 设置 inline style */
+      height: 56.25vw;
+      max-height: 70vh;
     }
     .project-cell.portrait .cell-media {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -193,8 +196,12 @@
 
     /* 手机端竖版照片 */
     @media(max-width: 768px) {
-      .project-row.portrait-double { flex-direction: column; }
-      .project-cell.portrait.single { width: 100%; }
+      .project-row.double { flex-direction: column; }
+      .project-cell.portrait.single {
+        width: 100%;
+        height: 56.25vw;
+        max-height: none;
+      }
     }
 
     /* 占位图（无视频/封面时） */
@@ -787,10 +794,14 @@ function buildGrid() {
         row.className = 'project-row double anim';
         const cell = makeCell(p, 'single');
         cell.style.width = next && next.portrait ? '50%' : '100%';
+        cell.style.height = '56.25vw';
+        cell.style.maxHeight = '70vh';
         row.appendChild(cell);
         if (next && next.portrait) {
           const cell2 = makeCell(next, 'single');
           cell2.style.width = '50%';
+          cell2.style.height = '56.25vw';
+          cell2.style.maxHeight = '70vh';
           row.appendChild(cell2);
           i++;
         }
