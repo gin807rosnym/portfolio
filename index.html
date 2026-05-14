@@ -789,20 +789,25 @@ function buildGrid() {
       row.className = 'project-row double anim';
 
       if (p.portrait) {
-        // portrait 照片必须两两配对，否则跳过
+        // portrait照片：优先两两配对，否则与视频配对
         if (next && next.portrait) {
+          // 两个portrait配对
           row.appendChild(makeCell(p, 'single'));
           row.appendChild(makeCell(next, 'single'));
           grid.appendChild(row);
           i += 2;
-          continue;
+        } else if (next) {
+          // portrait与视频配对（portrait占左半，视频占右半）
+          row.appendChild(makeCell(p, 'single'));
+          row.appendChild(makeCell(next, 'half'));
+          grid.appendChild(row);
+          i += 2;
         } else {
-          // 孤立的portrait照片跳过
+          // 没有下一个了，跳过
           i++;
-          continue;
         }
       } else {
-        // 普通视频双格：如果下一个是portrait则单独占行
+        // 普通视频双格
         row.appendChild(makeCell(p, 'half'));
         if (next && !next.portrait) {
           row.appendChild(makeCell(next, 'half'));
