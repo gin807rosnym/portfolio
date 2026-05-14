@@ -92,7 +92,7 @@
       height: 56.25vw;
       max-height: 70vh;
     }
-    /* 双格行 — 两个半宽并排 */
+    /* 双格行 — 两个半宽并排，高度与单格一致 */
     .project-row.double {
       display: flex;
     }
@@ -102,9 +102,9 @@
       background: #111;
       cursor: none;
       flex: 1;
-      /* 固定高度，与单格行保持一致 */
-      height: 28.125vw;
-      max-height: 35vh;
+      /* 高度与单格一致 */
+      height: 56.25vw;
+      max-height: 70vh;
     }
 
     /* ---- Project Cell (通用) — 图片填满格子，可能被裁切 ---- */
@@ -476,8 +476,8 @@
         max-height: 60vh;
       }
       .project-cell.half {
-        height: 22.5vw;
-        max-height: 30vh;
+        height: 45vw;
+        max-height: 60vh;
       }
     }
 
@@ -768,42 +768,44 @@ let displayProjects = []; // 随机排序后的数组
 function buildGrid() {
   const grid = document.getElementById('grid');
   grid.innerHTML = '';
-  
+
   // 随机排序
   displayProjects = shuffleArray(PROJECTS);
-  
+
   let i = 0;
   while (i < displayProjects.length) {
     const p = displayProjects[i];
-    
+
     if (p.layout === 'double') {
-      // 竖版照片双格行（portrait-double）：不用固定高度，用照片比例撑开
+      // 双格布局
+      const next = displayProjects[i + 1];
+      const row = document.createElement('div');
+      row.className = 'project-row double anim';
+
       if (p.portrait) {
-        const next = displayProjects[i + 1];
-        const row = document.createElement('div');
-        row.className = 'project-row portrait-double anim';
-        row.appendChild(makeCell(p, 'single'));
+        // portrait 照片：两两配对，如果只有一个就填满一行
+        row.className = 'project-row double anim';
+        const cell = makeCell(p, 'single');
+        cell.style.width = next && next.portrait ? '50%' : '100%';
+        row.appendChild(cell);
         if (next && next.portrait) {
-          row.appendChild(makeCell(next, 'single'));
+          const cell2 = makeCell(next, 'single');
+          cell2.style.width = '50%';
+          row.appendChild(cell2);
           i++;
         }
-        grid.appendChild(row);
       } else {
-        // 普通双格视频行（固定高度）
-        const next = displayProjects[i + 1];
-        const row = document.createElement('div');
-        row.className = 'project-row double anim';
+        // 普通视频双格
         row.appendChild(makeCell(p, 'half'));
         if (next && !next.portrait) {
           row.appendChild(makeCell(next, 'half'));
           i++;
         }
-        grid.appendChild(row);
       }
+      grid.appendChild(row);
     } else {
-      // 单格或竖屏
-      const layoutClass = p.layout === 'tall' ? 'tall' : 'single';
-      const cell = makeCell(p, layoutClass);
+      // 单格
+      const cell = makeCell(p, 'single');
       cell.classList.add('anim');
       grid.appendChild(cell);
     }
