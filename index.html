@@ -165,32 +165,67 @@
       transform: translateX(0);
     }
 
-    /* ---- 竖版（portrait）照片：保持完整比例不裁切 ---- */
-    /* 竖版单格：aspect-ratio 9/16 + contain 显示全图 */
-    .project-cell.portrait.single {
-      height: auto;
-      aspect-ratio: 9/16;
+    /* ---- 竖版（portrait）照片：双格并排，保持完整比例不裁切 ---- */
+    /* 竖版双格行：高度由照片比例决定，不用固定633px */
+    .project-row.portrait-double {
+      display: flex;
+      gap: 2px;
+    }
+    /* 竖版单格：9/16 比例，高度由照片比例撑开 */
+    .project-cell.portrait {
       background: #000;
     }
-    .project-cell.portrait.single .cell-media {
-      object-fit: contain;
-      /* 不设 inset:0，让它自然撑满 portrait 容器 */
+    .project-cell.portrait.single {
+      aspect-ratio: 9/16;
+      height: auto;
+      width: 50%;  /* 双格模式下每格占一半宽度 */
+      flex: unset;
+      overflow: hidden;
     }
-    .project-cell.portrait.single .cell-overlay {
-      /* overlay 也要contain，不裁切 */
+    .project-cell.portrait .cell-media {
+      object-fit: contain;
+      width: 100%;
+      /* 取消默认的 position:absolute，让格子高度由图片比例撑开 */
+      position: relative;
+      inset: unset;
+      transform: none;  /* 取消 hover scale 动画，避免溢出 */
+    }
+    .project-cell.portrait:hover .cell-media {
+      transform: scale(1.03);  /* 重新启用，hover时轻微放大 */
+      transform-origin: center;
+    }
+    .project-cell.portrait .cell-overlay {
       position: absolute;
       inset: 0;
     }
-    /* 手机端竖版照片：宽度100%，高度自适应 */
+    .project-cell.portrait .photo-label {
+      position: absolute;
+      left: 18px;
+      bottom: 16px;
+      z-index: 10;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #fff;
+      mix-blend-mode: difference;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateX(-18px);
+      transition: opacity 0.35s var(--ease), transform 0.4s var(--ease);
+    }
+    .project-cell.portrait:hover .photo-label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    /* 手机端竖版照片 */
     @media(max-width: 768px) {
-      .project-cell.portrait.single {
-        aspect-ratio: 9/16;
-        height: auto;
-        width: 100%;
+      .project-row.portrait-double {
+        flex-direction: column;
+        gap: 2px;
       }
-      .project-cell.portrait.single .cell-media {
+      .project-cell.portrait.single {
         width: 100%;
-        height: auto;
       }
     }
 
@@ -759,16 +794,16 @@ const PROJECTS = [
   { id:"p12", type:"video", title:"视频作品 12", titleCN:"视频作品 12", director:"", directorCN:"", cover:"", video:"videos/视频12.mp4", bilibili:"https://www.bilibili.com/video/BV1EQ5C6tEwz/", clipStart:0,  clipEnd:8,  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
   { id:"p13", type:"video", title:"视频作品 13", titleCN:"视频作品 13", director:"", directorCN:"", cover:"", video:"videos/视频13.mp4", bilibili:"https://www.bilibili.com/video/BV1ZQ5C64EGm/", clipStart:0,  clipEnd:8,  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
   { id:"p14", type:"video", title:"视频作品 14", titleCN:"视频作品 14", director:"", directorCN:"", cover:"", video:"videos/视频14.mp4", bilibili:"https://www.bilibili.com/video/BV1ES5C6fEt4/", clipStart:0,  clipEnd:8,  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  // ===== 照片 =====
+  // ===== 照片（竖版双格并排） =====
   { id:"ph1", type:"photo", portrait:true, title:"摄影作品 01", titleCN:"摄影作品 01", director:"", directorCN:"", photo:"images/图片1.png",  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
   { id:"ph2", type:"photo", portrait:true, title:"摄影作品 02", titleCN:"摄影作品 02", director:"", directorCN:"", photo:"images/图片2.png",  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph3", type:"photo", portrait:true, title:"摄影作品 03", titleCN:"摄影作品 03", director:"", directorCN:"", photo:"images/图片3.png",  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"ph3", type:"photo", portrait:true, title:"摄影作品 03", titleCN:"摄影作品 03", director:"", directorCN:"", photo:"images/图片3.png",  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
   { id:"ph4", type:"photo", portrait:true, title:"摄影作品 04", titleCN:"摄影作品 04", director:"", directorCN:"", photo:"images/图片4.png",  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
   { id:"ph5", type:"photo", portrait:true, title:"摄影作品 05", titleCN:"摄影作品 05", director:"", directorCN:"", photo:"images/图片5.png",  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph6", type:"photo", portrait:true, title:"摄影作品 06", titleCN:"摄影作品 06", director:"", directorCN:"", photo:"images/图片6.png",  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"ph6", type:"photo", portrait:true, title:"摄影作品 06", titleCN:"摄影作品 06", director:"", directorCN:"", photo:"images/图片6.png",  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
   { id:"ph7", type:"photo", portrait:true, title:"摄影作品 07", titleCN:"摄影作品 07", director:"", directorCN:"", photo:"images/图片7.png",  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
   { id:"ph8", type:"photo", portrait:true, title:"摄影作品 08", titleCN:"摄影作品 08", director:"", directorCN:"", photo:"images/图片8.png",  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph9", type:"photo", portrait:true, title:"摄影作品 09", titleCN:"摄影作品 09", director:"", directorCN:"", photo:"images/图片9.png",  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"ph9", type:"photo", portrait:true, title:"摄影作品 09", titleCN:"摄影作品 09", director:"", directorCN:"", photo:"images/图片9.png",  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
 ];
 
 /* =====================================================
@@ -827,17 +862,31 @@ function buildGrid() {
   let i = 0;
   while (i < displayProjects.length) {
     const p = displayProjects[i];
+    
     if (p.layout === 'double') {
-      // 双格：当前 + 下一个配对
-      const next = displayProjects[i + 1];
-      const row = document.createElement('div');
-      row.className = 'project-row double anim';
-      row.appendChild(makeCell(p, 'half'));
-      if (next) {
-        row.appendChild(makeCell(next, 'half'));
-        i++;
+      // 竖版照片双格行（portrait-double）：不用固定高度，用照片比例撑开
+      if (p.portrait) {
+        const next = displayProjects[i + 1];
+        const row = document.createElement('div');
+        row.className = 'project-row portrait-double anim';
+        row.appendChild(makeCell(p, 'single'));
+        if (next && next.portrait) {
+          row.appendChild(makeCell(next, 'single'));
+          i++;
+        }
+        grid.appendChild(row);
+      } else {
+        // 普通双格视频行（固定高度）
+        const next = displayProjects[i + 1];
+        const row = document.createElement('div');
+        row.className = 'project-row double anim';
+        row.appendChild(makeCell(p, 'half'));
+        if (next && !next.portrait) {
+          row.appendChild(makeCell(next, 'half'));
+          i++;
+        }
+        grid.appendChild(row);
       }
-      grid.appendChild(row);
     } else {
       // 单格或竖屏
       const layoutClass = p.layout === 'tall' ? 'tall' : 'single';
@@ -855,6 +904,7 @@ function makeCell(p, type) {
   const cell = document.createElement('article');
   cell.className = `project-cell ${type || 'single'}${p.portrait ? ' portrait' : ''}`;
   cell.dataset.id = p.id;
+  cell.dataset.portrait = p.portrait ? 'true' : 'false';
 
   // ---- 媒体层 ----
   let mediaHTML;
