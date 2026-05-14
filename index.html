@@ -590,8 +590,7 @@
   <div class="about-body" id="aboutBody"></div>
   <div class="about-contacts">
     <h3>Contact / 联系</h3>
-    <a href="#" class="about-contact-link" id="aboutEmail"></a><br>
-    <a href="#" class="about-contact-link" id="aboutIG" target="_blank">Instagram</a>
+    <a href="#" class="about-contact-link" id="aboutEmail"></a>
   </div>
 </div>
 
@@ -674,7 +673,6 @@ const SITE = {
   title: "YUAN JINHUI PORTFOLIO",
   titleCN: "袁金辉作品集",
   email: "13178826367",
-  instagram: "https://instagram.com/yourstudio",
   phone: "13178826367",
   about: {
     en: "",
@@ -1194,8 +1192,6 @@ function showAbout() {
   </div>`;
   document.getElementById('aboutEmail').textContent = '13178826367';
   document.getElementById('aboutEmail').href = 'tel:13178826367';
-  document.getElementById('aboutIG').href = SITE.instagram;
-  document.getElementById('aboutIG').style.display = '';
 
   aboutWrap.classList.add('active');
   document.title = '<span class="en-text">YUAN JINHUI PORTFOLIO — ABOUT</span><span class="cn-text">袁金辉作品集 — 关于我</span>';
