@@ -836,6 +836,7 @@ function makeCell(p, type) {
       data-clip-start="${p.clipStart != null ? p.clipStart : ''}"
       data-clip-end="${p.clipEnd != null ? p.clipEnd : ''}"></video>`;
   } else if (p.type === 'photo' && p.photo) {
+    // 照片直接显示，无遮幅
     mediaHTML = `<img class="cell-media" src="${p.photo}" alt="${p.title}" loading="lazy">`;
   } else if (p.cover) {
     mediaHTML = `<img class="cell-media" src="${p.cover}" alt="${p.title}" loading="lazy">`;
@@ -843,21 +844,10 @@ function makeCell(p, type) {
     mediaHTML = `<div class="cell-placeholder ${p.colorClass || 'c1'}"></div>`;
   }
 
-  // 文字叠加层（twinbrainsfilms风格）
-  const textOverlay = (p.title || p.director) ? `
-    <div class="cell-overlay">
-      <div class="cell-title">${p.title || ''}</div>
-      <div class="cell-director">${p.director || ''}</div>
-    </div>` : '';
-
   // PHOTO 标签（仅照片类型）
   const photoLabel = p.type === 'photo' ? `<div class="photo-label"><span class="en-text">PHOTO</span><span class="cn-text" style="display:none;">照片</span></div>` : '';
 
-  cell.innerHTML = `
-    ${mediaHTML}
-    ${textOverlay}
-    ${photoLabel}
-  `;
+  cell.innerHTML = mediaHTML + photoLabel;
 
   // ---- 点击打开详情 ----
   cell.addEventListener('click', () => openProject(p));
