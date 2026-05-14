@@ -6,16 +6,15 @@
   <title>YUAN JINHUI PORTFOLIO</title>
   <style>
     /* ===================================================
-       完整自包含演示版 — 所有样式内联
+       twinbrainsfilms 风格布局
        =================================================== */
     :root {
       --font: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
-      --bg: #fff;
-      --text: #000;
+      --bg: #000;
+      --text: #fff;
       --muted: #888;
-      --border: #e0e0e0;
+      --border: #222;
       --header: 48px;
-      --gap: 2px;
       --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,7 +30,7 @@
     a { color: inherit; text-decoration: none; }
     img, video { display: block; max-width: 100%; }
 
-    /* ---- Header ---- */
+    /* ---- Header — 黑色背景 ---- */
     .site-header {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -78,26 +77,24 @@
     }
     .lang-toggle:hover { border-color: var(--text); color: var(--text); }
 
-    /* ---- Grid — 仿 twinbrainsfilms 全屏布局 ---- */
+    /* ---- Grid — twinbrainsfilms 风格：无间距 ---- */
     .main-content { margin-top: var(--header); flex: 1; padding-bottom: 60px; }
-    .projects-grid {
-      display: block;
-    }
+    .projects-grid { display: block; }
 
-    /* 单格 — 全宽 */
+    /* 单格 — 全宽，高度100vh左右 */
     .project-cell.single {
       position: relative;
       overflow: hidden;
       background: #111;
       cursor: none;
-      height: 633px;
       width: 100%;
+      /* aspect-ratio控制高度，类似参考站的1:1方块 */
+      aspect-ratio: 16/10;
     }
     /* 双格行 — 两个半宽并排 */
     .project-row.double {
       display: flex;
-      height: 633px;
-      gap: 2px;
+      /* 无间距 */
     }
     .project-cell.half {
       position: relative;
@@ -105,20 +102,11 @@
       background: #111;
       cursor: none;
       flex: 1;
-      height: 100%;
-    }
-    /* 竖屏格 — 单格占满，宽度 640px，左居中，竖版比例 */
-    .project-cell.tall {
-      position: relative;
-      overflow: hidden;
-      background: #111;
-      cursor: none;
-      width: 640px;
-      height: 880px;
-      margin: 0 auto;
+      /* aspect-ratio保持一致 */
+      aspect-ratio: 16/10;
     }
 
-    /* ---- Project Cell (通用) ---- */
+    /* ---- Project Cell (通用) — 图片填充整个格子 ---- */
     .project-cell { aspect-ratio: unset; }
     .cell-media {
       position: absolute;
@@ -126,73 +114,88 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: opacity 0.3s var(--ease), transform 0.6s var(--ease);
-    }
-    /* 竖屏视频特殊处理：保持完整比例，不裁切 */
-    .project-cell.tall .cell-media {
-      object-fit: contain;
-      background: #000;
+      transition: transform 0.6s var(--ease), opacity 0.3s var(--ease);
     }
     /* 视频2/3/11等可能有黑边的视频，强制铺满 */
     .project-cell.fill .cell-media {
       object-fit: fill;
     }
+    /* hover时：图片放大1.025 + 颜色混合（twinbrainsfilms风格） */
     .project-cell:hover .cell-media {
-      transform: scale(1.03);
+      transform: scale(1.025);
+      mix-blend-mode: color;
     }
 
-    /* ---- PHOTO 差值提示标签 ---- */
+    /* ---- 文字叠加层（仿twinbrainsfilms）---- */
+    .cell-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      /* 默认透明，hover时淡入 */
+      opacity: 0;
+      transition: opacity 0.4s var(--ease);
+      pointer-events: none;
+    }
+    .project-cell:hover .cell-overlay {
+      opacity: 1;
+    }
+
+    .cell-title {
+      font-size: clamp(14px, 2vw, 24px);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1.1;
+    }
+    .cell-director {
+      font-size: clamp(10px, 1.2vw, 14px);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      margin-top: 4px;
+    }
+
+    /* ---- PHOTO 标签 ---- */
     .photo-label {
       position: absolute;
-      left: 18px;
-      bottom: 16px;
-      z-index: 10;  /* 必须在 cell-overlay (z:2) 之上 */
-      font-size: 13px;
+      left: 20px;
+      bottom: 20px;
+      z-index: 10;
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: #fff;
-      /* 差值混合模式 — 与背景色做差值，产生反转/高对比效果 */
       mix-blend-mode: difference;
       pointer-events: none;
-      /* 出现动画：从左侧滑入 + 渐显 */
-      opacity: 0;
-      transform: translateX(-18px);
-      transition: opacity 0.35s var(--ease), transform 0.4s var(--ease);
-    }
-    .project-cell:hover .photo-label {
-      opacity: 1;
-      transform: translateX(0);
     }
 
-    /* ---- 竖版（portrait）照片：双格并排，保持完整比例不裁切 ---- */
-    /* 竖版双格行：高度由照片比例决定，不用固定633px */
+    /* ---- 竖版（portrait）照片：双格并排，保持完整比例 ---- */
     .project-row.portrait-double {
       display: flex;
-      gap: 2px;
-    }
-    /* 竖版单格：9/16 比例，高度由照片比例撑开 */
-    .project-cell.portrait {
-      background: #000;
     }
     .project-cell.portrait.single {
       aspect-ratio: 9/16;
       height: auto;
-      width: 50%;  /* 双格模式下每格占一半宽度 */
+      width: 50%;
       flex: unset;
       overflow: hidden;
     }
     .project-cell.portrait .cell-media {
-      object-fit: contain;
-      width: 100%;
-      /* 取消默认的 position:absolute，让格子高度由图片比例撑开 */
       position: relative;
-      inset: unset;
-      transform: none;  /* 取消 hover scale 动画，避免溢出 */
+      width: 100%;
+      height: auto;
+      aspect-ratio: 9/16;
+      object-fit: contain;
     }
     .project-cell.portrait:hover .cell-media {
-      transform: scale(1.03);  /* 重新启用，hover时轻微放大 */
-      transform-origin: center;
+      transform: scale(1.025);
+      mix-blend-mode: color;
     }
     .project-cell.portrait .cell-overlay {
       position: absolute;
@@ -200,36 +203,17 @@
     }
     .project-cell.portrait .photo-label {
       position: absolute;
-      left: 18px;
-      bottom: 16px;
-      z-index: 10;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #fff;
-      mix-blend-mode: difference;
-      pointer-events: none;
-      opacity: 0;
-      transform: translateX(-18px);
-      transition: opacity 0.35s var(--ease), transform 0.4s var(--ease);
-    }
-    .project-cell.portrait:hover .photo-label {
-      opacity: 1;
-      transform: translateX(0);
-    }
-    /* 手机端竖版照片 */
-    @media(max-width: 768px) {
-      .project-row.portrait-double {
-        flex-direction: column;
-        gap: 2px;
-      }
-      .project-cell.portrait.single {
-        width: 100%;
-      }
+      left: 20px;
+      bottom: 20px;
     }
 
-    /* hover时启用差值混合模式（类似视频编辑软件里的差值效果） */
+    /* 手机端竖版照片 */
+    @media(max-width: 768px) {
+      .project-row.portrait-double { flex-direction: column; }
+      .project-cell.portrait.single { width: 100%; }
+    }
+
+    /* 占位图（无视频/封面时） */
     .cell-placeholder {
       position: absolute;
       inset: 0;
@@ -238,14 +222,6 @@
       justify-content: center;
       background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
     }
-    .cell-placeholder-bg {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    /* 彩色渐变占位 */
     .cell-placeholder.c1 { background: linear-gradient(135deg,#1a1a1a,#333); }
     .cell-placeholder.c2 { background: linear-gradient(135deg,#0f0f23,#1a1a2e); }
     .cell-placeholder.c3 { background: linear-gradient(135deg,#1c0303,#2d1414); }
@@ -253,54 +229,6 @@
     .cell-placeholder.c5 { background: linear-gradient(135deg,#0d1b0d,#1a2e1a); }
     .cell-placeholder.c6 { background: linear-gradient(135deg,#1a1600,#2d2800); }
     .cell-placeholder.c7 { background: linear-gradient(135deg,#1a001a,#2d002d); }
-
-    .placeholder-play {
-      width: 48px;
-      height: 48px;
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0.4;
-    }
-    .placeholder-play svg { width: 16px; height: 16px; fill: white; margin-left: 3px; }
-
-    .cell-overlay {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 16px 18px;
-      background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 55%);
-      opacity: 0;
-      transition: opacity 0.3s var(--ease);
-    }
-    .project-cell:hover .cell-overlay { opacity: 1; }
-    .project-cell.no-media .cell-overlay {
-      opacity: 1;
-      background: none;
-    }
-
-    .cell-title {
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #fff;
-      line-height: 1.4;
-    }
-    .cell-director {
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.65);
-      margin-top: 2px;
-    }
-    .project-cell.no-media .cell-title { color: #fff; }
-    .project-cell.no-media .cell-director { color: rgba(255,255,255,0.6); }
 
     /* ---- Custom Cursor ---- */
     .custom-cursor {
@@ -541,14 +469,9 @@
     /* 手机 — 全屏布局 */
     @media(max-width: 768px) {
       .project-cell.single,
-      .project-cell.half,
-      .project-cell.tall { height: 56vw; width: 100%; }
-      .project-row.double { 
-        flex-direction: column; 
-        gap: 2px;
-      }
-      .project-row.double .project-cell.half { height: 56vw; }
-      .project-cell.tall { width: 100%; height: auto; aspect-ratio: 9/16; max-height: 80vh; }
+      .project-cell.half { aspect-ratio: 4/3; }
+      .project-row.double { flex-direction: column; }
+      .project-cell.portrait.single { width: 100%; }
       .modal-info { grid-template-columns: 1fr; gap: 24px; padding: 20px 16px 48px; }
       .modal-title { font-size: 18px; }
       .about-wrap { padding: 32px 16px 60px; }
@@ -556,16 +479,13 @@
       .about-info-grid { grid-template-columns: 1fr; gap: 6px; }
       .about-info-grid .info-label { display: none; }
       .about-info-grid .info-value::before { content: attr(data-label) "："attr(data-value); }
-      /* 确保网格不被footer遮挡 */
       .projects-grid { padding-bottom: 40px; }
-      /* 手机端 PHOTO 标签位置微调 */
-      .photo-label { left: 12px; bottom: 10px; font-size: 11px; }
+      .photo-label { left: 12px; bottom: 12px; font-size: 10px; }
     }
     /* iPad — 768px ~ 1024px */
     @media(min-width: 769px) and (max-width: 1024px) {
-      .project-cell.single { height: 420px; }
-      .project-row.double .project-cell.half { height: 420px; }
-      .project-cell.tall { width: 540px; height: 740px; }
+      .project-cell.single { aspect-ratio: 16/9; }
+      .project-row.double .project-cell.half { aspect-ratio: 16/9; }
     }
 
     /* ---- Page transition ---- */
@@ -909,7 +829,6 @@ function makeCell(p, type) {
   // ---- 媒体层 ----
   let mediaHTML;
   if (p.type === 'video' && p.video) {
-    // 视频元素：不设置 src，由 IntersectionObserver 懒加载+播放
     const fillClass = ['p2','p3','p11'].includes(p.id) ? ' fill' : '';
     mediaHTML = `<video class="cell-media${fillClass}" muted playsinline preload="none"
       poster="${p.cover || ''}"
@@ -917,23 +836,26 @@ function makeCell(p, type) {
       data-clip-start="${p.clipStart != null ? p.clipStart : ''}"
       data-clip-end="${p.clipEnd != null ? p.clipEnd : ''}"></video>`;
   } else if (p.type === 'photo' && p.photo) {
-    // 照片：直接显示，懒加载
     mediaHTML = `<img class="cell-media" src="${p.photo}" alt="${p.title}" loading="lazy">`;
   } else if (p.cover) {
     mediaHTML = `<img class="cell-media" src="${p.cover}" alt="${p.title}" loading="lazy">`;
   } else {
-    mediaHTML = `<div class="cell-placeholder ${p.colorClass || 'c1'}">
-      <div class="placeholder-play">
-        <svg viewBox="0 0 20 20"><polygon points="5,3 17,10 5,17"/></svg>
-      </div>
-    </div>`;
+    mediaHTML = `<div class="cell-placeholder ${p.colorClass || 'c1'}"></div>`;
   }
 
-  // PHOTO 差值提示标签（仅照片类型）
+  // 文字叠加层（twinbrainsfilms风格）
+  const textOverlay = (p.title || p.director) ? `
+    <div class="cell-overlay">
+      <div class="cell-title">${p.title || ''}</div>
+      <div class="cell-director">${p.director || ''}</div>
+    </div>` : '';
+
+  // PHOTO 标签（仅照片类型）
   const photoLabel = p.type === 'photo' ? `<div class="photo-label"><span class="en-text">PHOTO</span><span class="cn-text" style="display:none;">照片</span></div>` : '';
 
   cell.innerHTML = `
     ${mediaHTML}
+    ${textOverlay}
     ${photoLabel}
   `;
 
