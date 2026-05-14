@@ -146,7 +146,7 @@
       position: absolute;
       left: 18px;
       bottom: 16px;
-      z-index: 10;
+      z-index: 10;  /* 必须在 cell-overlay (z:2) 之上 */
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.22em;
@@ -163,6 +163,35 @@
     .project-cell:hover .photo-label {
       opacity: 1;
       transform: translateX(0);
+    }
+
+    /* ---- 竖版（portrait）照片：保持完整比例不裁切 ---- */
+    /* 竖版单格：aspect-ratio 9/16 + contain 显示全图 */
+    .project-cell.portrait.single {
+      height: auto;
+      aspect-ratio: 9/16;
+      background: #000;
+    }
+    .project-cell.portrait.single .cell-media {
+      object-fit: contain;
+      /* 不设 inset:0，让它自然撑满 portrait 容器 */
+    }
+    .project-cell.portrait.single .cell-overlay {
+      /* overlay 也要contain，不裁切 */
+      position: absolute;
+      inset: 0;
+    }
+    /* 手机端竖版照片：宽度100%，高度自适应 */
+    @media(max-width: 768px) {
+      .project-cell.portrait.single {
+        aspect-ratio: 9/16;
+        height: auto;
+        width: 100%;
+      }
+      .project-cell.portrait.single .cell-media {
+        width: 100%;
+        height: auto;
+      }
     }
 
     /* hover时启用差值混合模式（类似视频编辑软件里的差值效果） */
@@ -731,15 +760,15 @@ const PROJECTS = [
   { id:"p13", type:"video", title:"视频作品 13", titleCN:"视频作品 13", director:"", directorCN:"", cover:"", video:"videos/视频13.mp4", bilibili:"https://www.bilibili.com/video/BV1ZQ5C64EGm/", clipStart:0,  clipEnd:8,  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
   { id:"p14", type:"video", title:"视频作品 14", titleCN:"视频作品 14", director:"", directorCN:"", cover:"", video:"videos/视频14.mp4", bilibili:"https://www.bilibili.com/video/BV1ES5C6fEt4/", clipStart:0,  clipEnd:8,  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
   // ===== 照片 =====
-  { id:"ph1", type:"photo", title:"摄影作品 01", titleCN:"摄影作品 01", director:"", directorCN:"", photo:"images/图片1.png",  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph2", type:"photo", title:"摄影作品 02", titleCN:"摄影作品 02", director:"", directorCN:"", photo:"images/图片2.png",  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph3", type:"photo", title:"摄影作品 03", titleCN:"摄影作品 03", director:"", directorCN:"", photo:"images/图片3.png",  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
-  { id:"ph4", type:"photo", title:"摄影作品 04", titleCN:"摄影作品 04", director:"", directorCN:"", photo:"images/图片4.png",  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph5", type:"photo", title:"摄影作品 05", titleCN:"摄影作品 05", director:"", directorCN:"", photo:"images/图片5.png",  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph6", type:"photo", title:"摄影作品 06", titleCN:"摄影作品 06", director:"", directorCN:"", photo:"images/图片6.png",  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
-  { id:"ph7", type:"photo", title:"摄影作品 07", titleCN:"摄影作品 07", director:"", directorCN:"", photo:"images/图片7.png",  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph8", type:"photo", title:"摄影作品 08", titleCN:"摄影作品 08", director:"", directorCN:"", photo:"images/图片8.png",  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"ph9", type:"photo", title:"摄影作品 09", titleCN:"摄影作品 09", director:"", directorCN:"", photo:"images/图片9.png",  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"ph1", type:"photo", portrait:true, title:"摄影作品 01", titleCN:"摄影作品 01", director:"", directorCN:"", photo:"images/图片1.png",  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph2", type:"photo", portrait:true, title:"摄影作品 02", titleCN:"摄影作品 02", director:"", directorCN:"", photo:"images/图片2.png",  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph3", type:"photo", portrait:true, title:"摄影作品 03", titleCN:"摄影作品 03", director:"", directorCN:"", photo:"images/图片3.png",  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"ph4", type:"photo", portrait:true, title:"摄影作品 04", titleCN:"摄影作品 04", director:"", directorCN:"", photo:"images/图片4.png",  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph5", type:"photo", portrait:true, title:"摄影作品 05", titleCN:"摄影作品 05", director:"", directorCN:"", photo:"images/图片5.png",  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph6", type:"photo", portrait:true, title:"摄影作品 06", titleCN:"摄影作品 06", director:"", directorCN:"", photo:"images/图片6.png",  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"ph7", type:"photo", portrait:true, title:"摄影作品 07", titleCN:"摄影作品 07", director:"", directorCN:"", photo:"images/图片7.png",  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph8", type:"photo", portrait:true, title:"摄影作品 08", titleCN:"摄影作品 08", director:"", directorCN:"", photo:"images/图片8.png",  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph9", type:"photo", portrait:true, title:"摄影作品 09", titleCN:"摄影作品 09", director:"", directorCN:"", photo:"images/图片9.png",  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
 ];
 
 /* =====================================================
@@ -822,8 +851,9 @@ function buildGrid() {
 
 function makeCell(p, type) {
   // type: 'single' | 'half' | 'tall' — 决定 CSS 类
+  // portrait: 竖版照片格子，需要特殊比例处理
   const cell = document.createElement('article');
-  cell.className = `project-cell ${type || 'single'}`;
+  cell.className = `project-cell ${type || 'single'}${p.portrait ? ' portrait' : ''}`;
   cell.dataset.id = p.id;
 
   // ---- 媒体层 ----
