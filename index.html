@@ -789,34 +789,42 @@ function buildGrid() {
       row.className = 'project-row double anim';
 
       if (p.portrait) {
-        // portrait 照片：两两配对，如果只有孤立的portrait就填满一行
-        const cell = makeCell(p, 'single');
-        cell.style.width = next && next.portrait ? '50%' : '100%';
-        cell.style.height = '56.25vw';
-        cell.style.maxHeight = '70vh';
-        row.appendChild(cell);
+        // portrait 照片必须两两配对，否则跳过
         if (next && next.portrait) {
+          const cell = makeCell(p, 'single');
+          cell.style.width = '50%';
+          cell.style.height = '56.25vw';
+          cell.style.maxHeight = '70vh';
+          row.appendChild(cell);
           const cell2 = makeCell(next, 'single');
           cell2.style.width = '50%';
           cell2.style.height = '56.25vw';
           cell2.style.maxHeight = '70vh';
           row.appendChild(cell2);
-          i++; // 跳过已配对的portrait
+          grid.appendChild(row);
+          i += 2;
+          continue;
+        } else {
+          // 孤立的portrait照片跳过
+          i++;
+          continue;
         }
       } else {
         // 普通视频双格：如果下一个是portrait则单独占行
         row.appendChild(makeCell(p, 'half'));
         if (next && !next.portrait) {
           row.appendChild(makeCell(next, 'half'));
-          i++; // 跳过已配对的非portrait
+          i++;
         }
+        grid.appendChild(row);
       }
-      grid.appendChild(row);
     } else {
-      // 单格
-      const cell = makeCell(p, 'single');
-      cell.classList.add('anim');
-      grid.appendChild(cell);
+      // 单格：只放视频，不放照片
+      if (p.type === 'video') {
+        const cell = makeCell(p, 'single');
+        cell.classList.add('anim');
+        grid.appendChild(cell);
+      }
     }
     i++;
   }
