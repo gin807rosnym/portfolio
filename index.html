@@ -82,7 +82,6 @@
     .main-content { margin-top: var(--header); flex: 1; padding-bottom: 60px; }
     .projects-grid {
       display: block;
-      /* 全屏铺满，移除最大宽度限制 */
     }
 
     /* 单格 — 全宽 */
@@ -141,6 +140,31 @@
     .project-cell:hover .cell-media {
       transform: scale(1.03);
     }
+
+    /* ---- PHOTO 差值提示标签 ---- */
+    .photo-label {
+      position: absolute;
+      left: 18px;
+      bottom: 16px;
+      z-index: 10;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #fff;
+      /* 差值混合模式 — 与背景色做差值，产生反转/高对比效果 */
+      mix-blend-mode: difference;
+      pointer-events: none;
+      /* 出现动画：从左侧滑入 + 渐显 */
+      opacity: 0;
+      transform: translateX(-18px);
+      transition: opacity 0.35s var(--ease), transform 0.4s var(--ease);
+    }
+    .project-cell:hover .photo-label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
     /* hover时启用差值混合模式（类似视频编辑软件里的差值效果） */
     .cell-placeholder {
       position: absolute;
@@ -291,6 +315,13 @@
       width: 100%;
       aspect-ratio: 16/9;
       object-fit: cover;
+    }
+    /* 照片英雄区 */
+    .modal-hero img.photo-full {
+      width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      background: #000;
     }
     /* 视频控件 */
     .video-controls-bar {
@@ -463,6 +494,8 @@
       .about-info-grid .info-value::before { content: attr(data-label) "："attr(data-value); }
       /* 确保网格不被footer遮挡 */
       .projects-grid { padding-bottom: 40px; }
+      /* 手机端 PHOTO 标签位置微调 */
+      .photo-label { left: 12px; bottom: 10px; font-size: 11px; }
     }
     /* iPad — 768px ~ 1024px */
     @media(min-width: 769px) and (max-width: 1024px) {
@@ -588,7 +621,7 @@
     </button>
   </div>
 
-  <!-- 视频英雄 -->
+  <!-- 视频/照片英雄 -->
   <div class="modal-hero" id="modalHero">
     <video id="modalVideo" autoplay muted loop playsinline></video>
     <div class="video-controls-bar">
@@ -671,30 +704,55 @@ const SITE = {
   }
 };
 
-// 【核心数据】14个视频项目
+// 【核心数据】视频 + 照片项目
 //
-// video     : 视频文件路径（放在 videos/ 文件夹里，首页预览用）
-// bilibili  : B站视频链接（点击后跳转到B站观看完整版）
+// type       : 'video' = 视频 / 'photo' = 照片
+// video     : 视频文件路径（type=video 时使用，放在 videos/ 文件夹）
+// photo     : 照片文件路径（type=photo 时使用，放在 images/ 文件夹）
+// bilibili  : B站视频链接（type=video 时点击跳转到B站）
 // cover     : 封面图路径（可留空，显示渐变色占位）
-// clipStart : 首页格子循环片段的起始秒数
-// clipEnd   : 首页格子循环片段的结束秒数
-// layout    : "single"=全宽独占一行 / "double"=与下一个视频并排 / "tall"=竖屏单格居中
+// clipStart : 首页格子循环片段的起始秒数（type=video 时有效）
+// clipEnd   : 首页格子循环片段的结束秒数（type=video 时有效）
+// layout    : "single"=全宽独占一行 / "double"=与下一个项目并排 / "tall"=竖屏单格居中
 const PROJECTS = [
-  { id:"p1",  title:"视频作品 01", titleCN:"视频作品 01", director:"", directorCN:"", cover:"", video:"videos/视频1.mp4",  bilibili:"https://www.bilibili.com/video/BV1Fm5C6cEsh/", clipStart:0,  clipEnd:8,  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
-  { id:"p2",  title:"视频作品 02", titleCN:"视频作品 02", director:"", directorCN:"", cover:"", video:"videos/视频2.mp4",  bilibili:"https://www.bilibili.com/video/BV1Fm5C6cEQw/", clipStart:0,  clipEnd:8,  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"p3",  title:"视频作品 03", titleCN:"视频作品 03", director:"", directorCN:"", cover:"", video:"videos/视频3.mp4",  bilibili:"https://www.bilibili.com/video/BV1Jm5C6cEUs/", clipStart:0,  clipEnd:8,  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"p4",  title:"视频作品 04", titleCN:"视频作品 04", director:"", directorCN:"", cover:"", video:"videos/视频4.mp4",  bilibili:"https://www.bilibili.com/video/BV16m5C6cEAM/", clipStart:0,  clipEnd:8,  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
-  { id:"p5",  title:"视频作品 05", titleCN:"视频作品 05", director:"", directorCN:"", cover:"", video:"videos/视频5.mp4",  bilibili:"https://www.bilibili.com/video/BV1ZQ5C64EaZ/", clipStart:0,  clipEnd:8,  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"p6",  title:"视频作品 06", titleCN:"视频作品 06", director:"", directorCN:"", cover:"", video:"videos/视频6.mp4",  bilibili:"https://www.bilibili.com/video/BV1JN5C6fE13/", clipStart:0,  clipEnd:8,  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"p7",  title:"视频作品 07", titleCN:"视频作品 07", director:"", directorCN:"", cover:"", video:"videos/视频7.mp4",  bilibili:"https://www.bilibili.com/video/BV1rP5C68EEV/", clipStart:0,  clipEnd:8,  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
-  { id:"p8",  title:"视频作品 08", titleCN:"视频作品 08", director:"", directorCN:"", cover:"", video:"videos/视频8.mp4",  bilibili:"https://www.bilibili.com/video/BV1rP5C68EEf/", clipStart:0,  clipEnd:8,  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"p9",  title:"视频作品 09", titleCN:"视频作品 09", director:"", directorCN:"", cover:"", video:"videos/视频9.mp4",  bilibili:"https://www.bilibili.com/video/BV1nP5C68Ehw/", clipStart:0,  clipEnd:8,  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"p10", title:"视频作品 10", titleCN:"视频作品 10", director:"", directorCN:"", cover:"", video:"videos/视频10.mp4", bilibili:"https://www.bilibili.com/video/BV1Fm5C6cEno/", clipStart:0,  clipEnd:8,  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
-  { id:"p11", title:"视频作品 11", titleCN:"视频作品 11", director:"", directorCN:"", cover:"", video:"videos/视频11.mp4", bilibili:"https://www.bilibili.com/video/BV1ZQ5C64EwF/", clipStart:0,  clipEnd:8,  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"p12", title:"视频作品 12", titleCN:"视频作品 12", director:"", directorCN:"", cover:"", video:"videos/视频12.mp4", bilibili:"https://www.bilibili.com/video/BV1EQ5C6tEwz/", clipStart:0,  clipEnd:8,  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
-  { id:"p13", title:"视频作品 13", titleCN:"视频作品 13", director:"", directorCN:"", cover:"", video:"videos/视频13.mp4", bilibili:"https://www.bilibili.com/video/BV1ZQ5C64EGm/", clipStart:0,  clipEnd:8,  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
-  { id:"p14", title:"视频作品 14", titleCN:"视频作品 14", director:"", directorCN:"", cover:"", video:"videos/视频14.mp4", bilibili:"https://www.bilibili.com/video/BV1ES5C6fEt4/", clipStart:0,  clipEnd:8,  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" }
+  // ===== 视频 =====
+  { id:"p1",  type:"video", title:"视频作品 01", titleCN:"视频作品 01", director:"", directorCN:"", cover:"", video:"videos/视频1.mp4",  bilibili:"https://www.bilibili.com/video/BV1Fm5C6cEsh/", clipStart:0,  clipEnd:8,  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"p2",  type:"video", title:"视频作品 02", titleCN:"视频作品 02", director:"", directorCN:"", cover:"", video:"videos/视频2.mp4",  bilibili:"https://www.bilibili.com/video/BV1Fm5C6cEQw/", clipStart:0,  clipEnd:8,  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"p3",  type:"video", title:"视频作品 03", titleCN:"视频作品 03", director:"", directorCN:"", cover:"", video:"videos/视频3.mp4",  bilibili:"https://www.bilibili.com/video/BV1Jm5C6cEUs/", clipStart:0,  clipEnd:8,  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"p4",  type:"video", title:"视频作品 04", titleCN:"视频作品 04", director:"", directorCN:"", cover:"", video:"videos/视频4.mp4",  bilibili:"https://www.bilibili.com/video/BV16m5C6cEAM/", clipStart:0,  clipEnd:8,  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"p5",  type:"video", title:"视频作品 05", titleCN:"视频作品 05", director:"", directorCN:"", cover:"", video:"videos/视频5.mp4",  bilibili:"https://www.bilibili.com/video/BV1ZQ5C64EaZ/", clipStart:0,  clipEnd:8,  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"p6",  type:"video", title:"视频作品 06", titleCN:"视频作品 06", director:"", directorCN:"", cover:"", video:"videos/视频6.mp4",  bilibili:"https://www.bilibili.com/video/BV1JN5C6fE13/", clipStart:0,  clipEnd:8,  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"p7",  type:"video", title:"视频作品 07", titleCN:"视频作品 07", director:"", directorCN:"", cover:"", video:"videos/视频7.mp4",  bilibili:"https://www.bilibili.com/video/BV1rP5C68EEV/", clipStart:0,  clipEnd:8,  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"p8",  type:"video", title:"视频作品 08", titleCN:"视频作品 08", director:"", directorCN:"", cover:"", video:"videos/视频8.mp4",  bilibili:"https://www.bilibili.com/video/BV1rP5C68EEf/", clipStart:0,  clipEnd:8,  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"p9",  type:"video", title:"视频作品 09", titleCN:"视频作品 09", director:"", directorCN:"", cover:"", video:"videos/视频9.mp4",  bilibili:"https://www.bilibili.com/video/BV1nP5C68Ehw/", clipStart:0,  clipEnd:8,  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"p10", type:"video", title:"视频作品 10", titleCN:"视频作品 10", director:"", directorCN:"", cover:"", video:"videos/视频10.mp4", bilibili:"https://www.bilibili.com/video/BV1Fm5C6cEno/", clipStart:0,  clipEnd:8,  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"p11", type:"video", title:"视频作品 11", titleCN:"视频作品 11", director:"", directorCN:"", cover:"", video:"videos/视频11.mp4", bilibili:"https://www.bilibili.com/video/BV1ZQ5C64EwF/", clipStart:0,  clipEnd:8,  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"p12", type:"video", title:"视频作品 12", titleCN:"视频作品 12", director:"", directorCN:"", cover:"", video:"videos/视频12.mp4", bilibili:"https://www.bilibili.com/video/BV1EQ5C6tEwz/", clipStart:0,  clipEnd:8,  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"p13", type:"video", title:"视频作品 13", titleCN:"视频作品 13", director:"", directorCN:"", cover:"", video:"videos/视频13.mp4", bilibili:"https://www.bilibili.com/video/BV1ZQ5C64EGm/", clipStart:0,  clipEnd:8,  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"p14", type:"video", title:"视频作品 14", titleCN:"视频作品 14", director:"", directorCN:"", cover:"", video:"videos/视频14.mp4", bilibili:"https://www.bilibili.com/video/BV1ES5C6fEt4/", clipStart:0,  clipEnd:8,  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  // ===== 照片 =====
+  { id:"ph1", type:"photo", title:"摄影作品 01", titleCN:"摄影作品 01", director:"", directorCN:"", photo:"images/照片1.png",  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph2", type:"photo", title:"摄影作品 02", titleCN:"摄影作品 02", director:"", directorCN:"", photo:"images/照片2.png",  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph3", type:"photo", title:"摄影作品 03", titleCN:"摄影作品 03", director:"", directorCN:"", photo:"images/照片3.png",  colorClass:"c3", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"ph4", type:"photo", title:"摄影作品 04", titleCN:"摄影作品 04", director:"", directorCN:"", photo:"images/照片4.png",  colorClass:"c4", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph5", type:"photo", title:"摄影作品 05", titleCN:"摄影作品 05", director:"", directorCN:"", photo:"images/照片5.png",  colorClass:"c5", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph6", type:"photo", title:"摄影作品 06", titleCN:"摄影作品 06", director:"", directorCN:"", photo:"images/照片6.png",  colorClass:"c6", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
+  { id:"ph7", type:"photo", title:"摄影作品 07", titleCN:"摄影作品 07", director:"", directorCN:"", photo:"images/照片7.png",  colorClass:"c7", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph8", type:"photo", title:"摄影作品 08", titleCN:"摄影作品 08", director:"", directorCN:"", photo:"images/照片8.png",  colorClass:"c1", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"double" },
+  { id:"ph9", type:"photo", title:"摄影作品 09", titleCN:"摄影作品 09", director:"", directorCN:"", photo:"images/照片9.png",  colorClass:"c2", description:{en:"",cn:""}, credits:[], tags:[], tagsCN:[], layout:"single" },
 ];
+
+/* =====================================================
+   随机排序（Fisher-Yates 洗牌算法）
+   ===================================================== */
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 /* =====================================================
    LANG
@@ -728,14 +786,21 @@ function buildTicker() {
    double : 两个半宽并排一行（下一个项目自动配对）
    tall   : 竖屏，单格占满，固定宽度居中
    ===================================================== */
+let displayProjects = []; // 随机排序后的数组
+
 function buildGrid() {
   const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  
+  // 随机排序
+  displayProjects = shuffleArray(PROJECTS);
+  
   let i = 0;
-  while (i < PROJECTS.length) {
-    const p = PROJECTS[i];
+  while (i < displayProjects.length) {
+    const p = displayProjects[i];
     if (p.layout === 'double') {
       // 双格：当前 + 下一个配对
-      const next = PROJECTS[i + 1];
+      const next = displayProjects[i + 1];
       const row = document.createElement('div');
       row.className = 'project-row double anim';
       row.appendChild(makeCell(p, 'half'));
@@ -763,16 +828,17 @@ function makeCell(p, type) {
 
   // ---- 媒体层 ----
   let mediaHTML;
-  if (p.video) {
+  if (p.type === 'video' && p.video) {
     // 视频元素：不设置 src，由 IntersectionObserver 懒加载+播放
-    // data-clip-start / data-clip-end 控制循环片段
-    // 视频2/3/11可能有非16:9比例，添加fill类消除黑边
     const fillClass = ['p2','p3','p11'].includes(p.id) ? ' fill' : '';
     mediaHTML = `<video class="cell-media${fillClass}" muted playsinline preload="none"
       poster="${p.cover || ''}"
       data-src="${p.video}"
       data-clip-start="${p.clipStart != null ? p.clipStart : ''}"
       data-clip-end="${p.clipEnd != null ? p.clipEnd : ''}"></video>`;
+  } else if (p.type === 'photo' && p.photo) {
+    // 照片：直接显示，懒加载
+    mediaHTML = `<img class="cell-media" src="${p.photo}" alt="${p.title}" loading="lazy">`;
   } else if (p.cover) {
     mediaHTML = `<img class="cell-media" src="${p.cover}" alt="${p.title}" loading="lazy">`;
   } else {
@@ -783,8 +849,12 @@ function makeCell(p, type) {
     </div>`;
   }
 
+  // PHOTO 差值提示标签（仅照片类型）
+  const photoLabel = p.type === 'photo' ? `<div class="photo-label"><span class="en-text">PHOTO</span><span class="cn-text" style="display:none;">照片</span></div>` : '';
+
   cell.innerHTML = `
     ${mediaHTML}
+    ${photoLabel}
     <div class="cell-overlay">
       <div class="cell-title">
         <span class="en-text">${p.title}</span>
@@ -823,19 +893,14 @@ function setupClipLoop(video) {
   const hasEnd   = !isNaN(end);
 
   if (!hasStart && !hasEnd) {
-    // 无 clip 区间：直接 loop 整段
     video.loop = true;
     return;
   }
 
-  // 有 clip 区间：用 timeupdate 手动循环
   video.loop = false;
-
-  // 跳到起点
   if (hasStart) video.currentTime = start;
 
   const onTimeUpdate = () => {
-    // 到达终点或超出 → 跳回起点
     if (hasEnd && video.currentTime >= end) {
       video.currentTime = hasStart ? start : 0;
       video.play().catch(()=>{});
@@ -847,7 +912,6 @@ function setupClipLoop(video) {
     video.play().catch(()=>{});
   };
 
-  // 存到元素上，方便清理
   video._clipUpdate = onTimeUpdate;
   video._clipEnded  = onEnded;
   video.addEventListener('timeupdate', onTimeUpdate);
@@ -865,7 +929,6 @@ function teardownClipLoop(video) {
 
 /* =====================================================
    INTERSECTION OBSERVER — 滚动进视口自动播放
-   完全仿照 twinbrainsfilms.com 的行为
    ===================================================== */
 let videoObserver = null;
 
@@ -874,7 +937,6 @@ function initVideoObserver() {
     entries.forEach(entry => {
       const video = entry.target;
       if (entry.isIntersecting) {
-        // 进入视口：懒加载 src 并播放
         if (!video.src && video.dataset.src) {
           video.src = video.dataset.src;
           video.load();
@@ -885,7 +947,6 @@ function initVideoObserver() {
             video.play().catch(()=>{});
           }, { once: true });
         } else {
-          // 已加载过 → 直接播
           const s = parseFloat(video.dataset.clipStart);
           if (!isNaN(s) && (video.currentTime < s || (parseFloat(video.dataset.clipEnd) && video.currentTime >= parseFloat(video.dataset.clipEnd)))) {
             video.currentTime = s;
@@ -894,23 +955,20 @@ function initVideoObserver() {
           video.play().catch(()=>{});
         }
       } else {
-        // 离开视口：暂停，节省性能（手机端不暂停，防止卡顿）
         if (window.innerWidth > 768) {
           video.pause();
         }
       }
     });
   }, {
-    threshold: 0.1   // 格子露出 10% 就开始播，降低避免卡顿
+    threshold: 0.1
   });
 
-  // 观察所有网格视频（不包括 modal 里的）
   document.querySelectorAll('.projects-grid video[data-src]').forEach(v => {
     videoObserver.observe(v);
   });
 }
 
-// 供 openProject 中的 relatedGrid 单独调用
 function observeGridVideos(container) {
   if (!videoObserver) return;
   container.querySelectorAll('video[data-src]').forEach(v => {
@@ -919,9 +977,8 @@ function observeGridVideos(container) {
 }
 
 /* =====================================================
-   PROJECT MODAL
+   PROJECT MODAL — 支持视频和照片
    ===================================================== */
-// 原始hero内容（常量，不会被修改）
 const ORIGINAL_HERO = `
   <video id="modalVideo" autoplay muted loop playsinline></video>
   <div class="video-controls-bar">
@@ -948,7 +1005,7 @@ const ORIGINAL_HERO = `
 
 function openProject(p) {
   const modal = document.getElementById('projectModal');
-  const video = document.getElementById('modalVideo');
+  const hero = document.getElementById('modalHero');
 
   // 标题
   document.getElementById('mTitle').textContent = p.title;
@@ -981,27 +1038,18 @@ function openProject(p) {
       </div>
     </div>`).join('');
 
-  // 视频 — 点击后跳转到B站观看完整版
-  const hero = document.getElementById('modalHero');
-  
+  // 英雄区：根据类型显示视频或照片
   hero.style.background = '#000';
   hero.style.aspectRatio = '';
-  video.style.display = 'none';
-  
-  // 隐藏本地视频控件
-  document.querySelector('.video-controls-bar').style.display = 'none';
-  
-  if (p.bilibili) {
-    // 显示B站嵌入播放器
-    hero.style.background = '#000';
-    hero.style.display = 'flex';
-    hero.style.alignItems = 'center';
-    hero.style.justifyContent = 'center';
-    
-    // 从B站链接提取BVID
+  hero.style.display = '';
+  hero.style.alignItems = '';
+  hero.style.justifyContent = '';
+
+  if (p.type === 'video' && p.bilibili) {
+    // 视频 → B站嵌入
+    document.querySelector('.video-controls-bar') && (document.querySelector('.video-controls-bar').style.display = 'none');
     const bvidMatch = p.bilibili.match(/bilibili\.com\/video\/(BV[\w]+)/);
     const bvid = bvidMatch ? bvidMatch[1] : '';
-    
     hero.innerHTML = `
       <iframe 
         src="https://player.bilibili.com/player.html?bvid=${bvid}&autoplay=true" 
@@ -1015,27 +1063,29 @@ function openProject(p) {
         </a>
       </div>
     `;
+  } else if (p.type === 'photo' && p.photo) {
+    // 照片 → 显示大图，隐藏视频控件
+    const ctrlBar = hero.querySelector('.video-controls-bar');
+    if (ctrlBar) ctrlBar.style.display = 'none';
+    hero.innerHTML = `<img class="photo-full" src="${p.photo}" alt="${p.title}">`;
+  } else {
+    hero.innerHTML = ORIGINAL_HERO;
   }
 
-  // 相关
-    const relGrid = document.getElementById('relatedGrid');
+  // 相关推荐
+  const relGrid = document.getElementById('relatedGrid');
   relGrid.innerHTML = '';
-  PROJECTS.filter(x => x.id !== p.id).slice(0,3).forEach(rp => {
+  displayProjects.filter(x => x.id !== p.id).slice(0,3).forEach(rp => {
     const cell = makeCell(rp, 'half');
     cell.style.flex = '1';
     relGrid.appendChild(cell);
   });
-  // 让相关格子视频也被 observer 管理
   setTimeout(() => observeGridVideos(relGrid), 100);
 
   modal.classList.add('open');
   modal.scrollTop = 0;
-
-  // 初始化视频控件
   initModalVideoControls();
-  // 重新应用语言
   setLang(currentLang);
-
   document.body.style.overflow = 'hidden';
 }
 
@@ -1043,37 +1093,23 @@ function closeProject() {
   const modal = document.getElementById('projectModal');
   const hero = document.getElementById('modalHero');
   modal.classList.remove('open');
-  
-  // 重置video
+
   const video = document.getElementById('modalVideo');
-  if (video) {
-    video.pause();
-    video.src = '';
-  }
-  
-  // 重置hero样式
-  hero.style.background = '#000';
-  hero.style.aspectRatio = '';
-  hero.style.display = '';
-  hero.style.alignItems = '';
-  hero.style.justifyContent = '';
-  
-  // 用常量恢复原始hero内容（避免被B站iframe污染）
+  if (video) { video.pause(); video.src = ''; }
+
   hero.innerHTML = ORIGINAL_HERO;
-  
-  // 重新绑定video元素事件
+
   const newVideo = document.getElementById('modalVideo');
   if (newVideo) {
     newVideo.addEventListener('loadedmetadata', () => {
       setupClipLoop(newVideo);
     }, { once: true });
   }
-  
+
   document.body.style.overflow = '';
 }
 
 document.getElementById('modalBack').addEventListener('click', closeProject);
-// ESC 关闭
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProject(); });
 
 /* =====================================================
@@ -1081,7 +1117,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProject
    ===================================================== */
 function initModalVideoControls() {
   const video = document.getElementById('modalVideo');
+  if (!video) return;
   const playBtn = document.getElementById('ctrlPlay');
+  if (!playBtn) return;
   const playIcon = document.getElementById('iconPlay');
   const fill = document.getElementById('progressFill');
   const track = document.getElementById('progressTrack');
@@ -1095,11 +1133,10 @@ function initModalVideoControls() {
   const togglePlay = () => {
     if (video.paused) {
       video.play().catch(()=>{});
-      playIcon.setAttribute('points','3,2 3,18 6,18 6,2 10,2');
-      playIcon.setAttribute('d','M3 3h4v14H3zM11 3h4v14h-4z');
+      if (playIcon) { playIcon.setAttribute('points','3,2 3,18 6,18 6,2 10,2'); playIcon.setAttribute('d','M3 3h4v14H3zM11 3h4v14h-4z'); }
     } else {
       video.pause();
-      playIcon.setAttribute('points','5,3 17,10 5,17');
+      if (playIcon) playIcon.setAttribute('points','5,3 17,10 5,17');
     }
   };
 
@@ -1108,25 +1145,31 @@ function initModalVideoControls() {
 
   video.ontimeupdate = () => {
     if (!video.duration) return;
-    fill.style.width = (video.currentTime / video.duration * 100) + '%';
-    timeEl.textContent = fmtT(video.currentTime) + ' / ' + fmtT(video.duration);
+    if (fill) fill.style.width = (video.currentTime / video.duration * 100) + '%';
+    if (timeEl) timeEl.textContent = fmtT(video.currentTime) + ' / ' + fmtT(video.duration);
   };
 
-  track.onclick = e => {
-    const r = track.getBoundingClientRect();
-    video.currentTime = ((e.clientX - r.left) / r.width) * video.duration;
-  };
+  if (track) {
+    track.onclick = e => {
+      const r = track.getBoundingClientRect();
+      video.currentTime = ((e.clientX - r.left) / r.width) * video.duration;
+    };
+  }
 
-  muteBtn.onclick = () => {
-    video.muted = !video.muted;
-    volLines.style.display = video.muted ? 'none' : '';
-  };
+  if (muteBtn) {
+    muteBtn.onclick = () => {
+      video.muted = !video.muted;
+      if (volLines) volLines.style.display = video.muted ? 'none' : '';
+    };
+  }
 
-  fsBtn.onclick = () => {
-    const hero = document.getElementById('modalHero');
-    if (hero.requestFullscreen) hero.requestFullscreen();
-    else if (hero.webkitRequestFullscreen) hero.webkitRequestFullscreen();
-  };
+  if (fsBtn) {
+    fsBtn.onclick = () => {
+      const hero = document.getElementById('modalHero');
+      if (hero.requestFullscreen) hero.requestFullscreen();
+      else if (hero.webkitRequestFullscreen) hero.webkitRequestFullscreen();
+    };
+  }
 }
 
 /* =====================================================
@@ -1153,7 +1196,6 @@ function showAbout() {
   mainContent.style.display = 'none';
   footer.style.display = 'none';
 
-  // 填充关于页内容
   document.getElementById('aboutTitle').innerHTML = '关于我';
   document.getElementById('aboutBody').innerHTML = `<div class="about-section">
     <h2>基本信息</h2>
@@ -1165,7 +1207,7 @@ function showAbout() {
       <span class="info-label">电话/微信</span><span class="info-value">13178826367</span>
     </div>
   </div>
-  <div class="about-section">
+ <div class="about-section">
     <h2>自我介绍</h2>
     <p>能吃苦，我会尽快融入新的环境，适配大家的工作流，虚心学习。有前期拍摄以及影像后期编辑的能力，基本能够使用市面上的摄影机，云台。</p>
     <p>会使用PR，AE，Davinci Resolve 等后期处理软件以及三维设计软件 Blender。</p>
@@ -1187,7 +1229,6 @@ navAbout.addEventListener('click', e => { e.preventDefault(); showAbout(); });
 /* =====================================================
    FOOTER LINKS
    ===================================================== */
-// Email me 点击显示电话/微信
 const footerEmailBtn = document.getElementById('footerEmail');
 let emailClickCount = 0;
 footerEmailBtn.addEventListener('click', () => {
@@ -1228,12 +1269,12 @@ document.getElementById('siteLogo').addEventListener('click', showLatest);
    INIT
    ===================================================== */
 buildTicker();
-buildGrid();
+buildGrid();          // ← 随机排序后构建网格
 setLang(currentLang);
 
 requestAnimationFrame(() => requestAnimationFrame(() => {
   initScrollAnim();
-  initVideoObserver();  // ← 启动视口自动播放
+  initVideoObserver();
 }));
 </script>
 </body>
