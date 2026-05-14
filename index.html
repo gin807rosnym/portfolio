@@ -935,16 +935,6 @@ function makeCell(p, type) {
   cell.innerHTML = `
     ${mediaHTML}
     ${photoLabel}
-    <div class="cell-overlay">
-      <div class="cell-title">
-        <span class="en-text">${p.title}</span>
-        <span class="cn-text" style="display:none">${p.titleCN || p.title}</span>
-      </div>
-      <div class="cell-director">
-        <span class="en-text">${p.director}</span>
-        <span class="cn-text" style="display:none">${p.directorCN || p.director}</span>
-      </div>
-    </div>
   `;
 
   // ---- 点击打开详情 ----
