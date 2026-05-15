@@ -453,14 +453,17 @@
     /* 手机 — 全宽布局 */
     @media(max-width: 768px) {
       .main-content { padding-bottom: 0 !important; }
-      .project-cell.single,
-      .project-cell.half {
+      .project-cell.single {
         height: 56.25vw !important;
         max-height: none !important;
         width: 100% !important;
-        flex: unset !important;
       }
-      .project-row.double { flex-direction: column !important; }
+      /* 手机端双格保持并排，高度按 50vw 宽度的 9:16 纵向比例 */
+      .project-cell.half {
+        height: 56.25vw !important;
+        max-height: none !important;
+        flex: 1 !important;
+      }
       .project-cell.portrait.single {
         width: 100% !important;
         height: 56.25vw !important;
