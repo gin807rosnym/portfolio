@@ -414,16 +414,16 @@
     .site-footer { border-top: 1px solid var(--border); margin-top: auto; }
     .ticker-wrap { overflow: hidden; border-bottom: 1px solid var(--border); padding: 12px 0; }
     .ticker {
-      display: flex;
+      display: inline-flex;
       white-space: nowrap;
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--muted);
-      animation: tick 22s linear infinite;
       will-change: transform;
     }
-    .ticker:hover { animation-play-state: paused; cursor: default; }
+    .ticker:hover { cursor: default; }
+    .ticker-inner { display: inline-block; white-space: nowrap; }
     @keyframes tick { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     .footer-bottom {
       display: flex;
@@ -768,10 +768,42 @@ document.getElementById('langBtn').addEventListener('click', () => {
    TICKER
    ===================================================== */
 function buildTicker() {
-  const el = document.getElementById('ticker');
+  const wrap = document.getElementById('ticker');
   const sep = '  —  ';
   const text = '袁金辉的作品集 2026' + sep + 'JINHUI YUAN PORTFOLIO 2026' + sep + 'ジンのポートフォリオ 2026' + sep;
-  el.innerHTML = `<span>${text}</span><span>${text}</span>`;
+
+  // 用 JS 驱动无缝滚动，彻底避免 CSS animation 循环时的跳帧
+  const isMobile = window.innerWidth <= 768;
+  const speed = isMobile ? 0.6 : 0.35; // px/frame，手机稍快
+
+  // 创建两份内容（保证一份滚出去另一份接上）
+  wrap.innerHTML = `<span class="ticker-inner">${text}</span><span class="ticker-inner">${text}</span>`;
+
+  let x = 0;
+  let singleW = 0;
+
+  function measure() {
+    const spans = wrap.querySelectorAll('.ticker-inner');
+    if (spans.length) singleW = spans[0].offsetWidth;
+  }
+
+  function tick() {
+    if (!singleW) measure();
+    x -= speed;
+    if (Math.abs(x) >= singleW) x += singleW; // 重置到第二份起始位置，完全无缝
+    wrap.style.transform = `translateX(${x}px)`;
+    requestAnimationFrame(tick);
+  }
+
+  // 等待字体/布局稳定后再开始
+  requestAnimationFrame(() => { measure(); tick(); });
+
+  // 窗口resize时重新测量
+  window.addEventListener('resize', () => {
+    measure();
+    // 速度跟随设备宽度动态更新
+    // (speed 变量在闭包内，重新赋值)
+  });
 }
 
 /* =====================================================
